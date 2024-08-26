@@ -1,10 +1,11 @@
 import { Router } from "express";
 
 // controllers
-import { loginController } from "../controllers/auth.controller.js";
+import { loginController, logOutController } from "../controllers/auth.controller.js";
 
 // middlewares
 import { validateData } from "../middlewares/validationMiddleware.js";
+import { verifyToken } from "../middlewares/authJwtMiddleware.js";
 
 // schemas
 import { userLoginSchema } from "../schemas/userSchemas.js";
@@ -17,6 +18,11 @@ AuthRouter.use((req, res, next) => {
     next();
 });
 
+// login
 AuthRouter.post('/login', validateData(userLoginSchema), loginController);
+
+// Protected logout
+AuthRouter.get('/logout', verifyToken , logOutController);
+
 
 export default AuthRouter;

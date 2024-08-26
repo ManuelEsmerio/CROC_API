@@ -6,6 +6,9 @@ import cookieParser from 'cookie-parser';
 
 // Routers
 import AuthRouter from "./routers/auth.routes.js";
+import UserRouter from './routers/user.routes.js';
+import CompanyRouter from './routers/company.routes.js';
+import DocumentRouter from './routers/documents.routes.js';
 
 // Custom middleware
 import { errorHandler } from './middlewares/errorMiddleware.js';
@@ -31,6 +34,15 @@ app.use(cookieParser());
 
 //Routes
 app.use("/api/auth",AuthRouter);
+
+// Route User
+app.use("/api/user", UserRouter);
+
+// Route Company
+app.use("/api/company", CompanyRouter);
+
+// Route Document
+app.use("/api/documents", DocumentRouter);
 
 app.get('/', (req, res) => {
     res.status(200).json({message: 'Hello world'});

@@ -1,15 +1,17 @@
+import { StatusCodes } from 'http-status-codes';
 import pkg  from 'jsonwebtoken';
 
 export const verifyToken = async (req, res, next) => {
-
-    const token = req.headers('auth-token');
-    if(!token) return res.status(403).json({ message: 'Forbidden' });
+    const bearerToken = req.headers['authorization'];
+    if(!bearerToken) return res.status(StatusCodes.FORBIDDEN).json({ message: 'Forbidden' });
 
     try {
-        pkg.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-            if(err) return res.status(403).json({
+        const bearerTokenList = bearerToken.split(" ");
+        const token = bearerTokenList[1]
+        pkg.verify(token.trim(), process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+            if(err) return res.status(StatusCodes.FORBIDDEN).json({
                 // path: __dirname,
-                status: 401,
+                status: StatusCodes.UNAUTHORIZED,
                 message: 'Unauthorized',
                 error: err.message
             });
