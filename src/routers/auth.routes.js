@@ -1,14 +1,14 @@
 import { Router } from "express";
 
 // controllers
-import { loginController, logOutController } from "../controllers/auth.controller.js";
+import { loginController, logOutController, resetPasswordController } from "../controllers/auth.controller.js";
 
 // middlewares
 import { validateData } from "../middlewares/validationMiddleware.js";
 import { verifyToken } from "../middlewares/authJwtMiddleware.js";
 
 // schemas
-import { userLoginSchema } from "../schemas/userSchemas.js";
+import { resetPasswordSchema, userLoginSchema } from "../schemas/userSchemas.js";
 
 const AuthRouter = Router();
 
@@ -20,6 +20,9 @@ AuthRouter.use((req, res, next) => {
 
 // login
 AuthRouter.post('/login', validateData(userLoginSchema), loginController);
+
+// Reset password
+AuthRouter.post('/resetPassword', validateData(resetPasswordSchema), resetPasswordController);
 
 // Protected logout
 AuthRouter.get('/logout', verifyToken , logOutController);

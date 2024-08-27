@@ -14,7 +14,7 @@ const getAllCompanyController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -30,7 +30,7 @@ const getCompanyByIdController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -46,7 +46,7 @@ const updateCompanyController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -60,7 +60,7 @@ const addCompanyController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -79,7 +79,7 @@ const deleteCompanyController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });

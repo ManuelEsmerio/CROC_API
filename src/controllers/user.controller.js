@@ -1,6 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { CustomAPIError } from "../shared/customHandleError.js";
 import { addUser, deleteUser, getAllUsers, getUserById, updateUser } from "../repositories/user.repositories.js";
+import { zx } from "zodix";
+import { paramsIdentifySchema } from "../schemas/userSchemas.js";
+import { z } from "zod";
 
 //  Get all users controller
 const getAllUserController = (async (req, res, next) => {
@@ -11,7 +14,7 @@ const getAllUserController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -27,7 +30,7 @@ const getUserByIdController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -42,7 +45,7 @@ const getUserByEmailController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -58,7 +61,7 @@ const updateUserController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -72,7 +75,7 @@ const addUserController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
@@ -80,7 +83,7 @@ const addUserController = (async (req, res, next) => {
 // Update user by id
 const deleteUserController = (async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const { userId } = zx.parseParams(req.params, paramsIdentifySchema);
         const result = await deleteUser(userId);
         if(!result) {
              res.status(StatusCodes.OK).json({ success: false, message: "The user wasn't deleted, please try again.", stack: "Cause: The user was already deleted or was not found in the database" });
@@ -91,7 +94,7 @@ const deleteUserController = (async (req, res, next) => {
         if(error instanceof CustomAPIError){
             res.status(error.statusCode).json({ success: false, message: error.message, stack: error.info });
         }else{
-            res.status(StatusCodes.BAD_REQUEST).json({ error });
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, message: error.message});
         }
     }
 });
