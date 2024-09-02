@@ -23,7 +23,7 @@ const getAllUserController = (async (req, res, next) => {
 const getUserByIdController = (async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const result = await getUserById(userId);
+        const [result] = await getUserById(userId);
         res.status(StatusCodes.OK).json(result);
     } catch (error) {
         console.log(error)
@@ -38,7 +38,7 @@ const getUserByIdController = (async (req, res, next) => {
 const getUserByEmailController = (async (req, res, next) => {
     try {
         const { email } = req.body;
-        const result = await getUserByEmail(email);
+        const [result] = await getUserByEmail(email);
         res.status(StatusCodes.OK).json(result);
     } catch (error) {
         console.log(error)

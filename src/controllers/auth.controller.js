@@ -2,7 +2,7 @@ import pkg from 'jsonwebtoken';
 
 import generator from 'generate-password';
 
-import { loginRepository } from "../repositories/auth.repositories.js";
+import { loginRepository, resetPassword } from "../repositories/auth.repositories.js";
 import { StatusCodes } from "http-status-codes";
 import { CustomAPIError } from "../shared/customHandleError.js";
 import { getUserByEmail } from '../repositories/user.repositories.js';
@@ -45,19 +45,24 @@ const resetPasswordController = (async (req, res, next) => {
     try {
         const { email } = req.body;
         const [result] = await getUserByEmail(email);
-        if (!result) res.status(StatusCodes.BAD_REQUEST).json({success: false, message: 'Unregistered user.', info:'Unregistered user, please validate your information and try again.'})
+        if (!result) throw new CustomAPIError("Invalid email.", StatusCodes.BAD_REQUEST, "Incorrect email, please verify your email and try again.");
 
-        generator
+        // generate new password
+        const temporalPassword = generator.generate({ length: 10, numbers: true });
+
+        // change password
+        const data = await resetPassword(temporalPassword, result.id);
+        console.log('data: ', data)
+         if(!data) throw new CustomAPIError("Your password wasn't changed, please try again.", StatusCodes.INTERNAL_SERVER_ERROR, "Error occurs trying to change your password.");
+
         // Send email with the new password
         transporter.sendMail(mailData({
             to: result.email,   // list of receivers
             subject: 'Reset password',
-            text: 'That was easy!',
-            html: templateResetPassword(generator.generate({ length: 10, numbers: true }), `${result.name} ${result.lastname}`),
+            html: templateResetPassword(temporalPassword, `${result.name} ${result.lastname}`),
         }), (error, info) => {
             if(error) res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 
-            console.log(info);
             res.status(StatusCodes.OK).json({ success: true, message: info.messageId });
         })
     } catch (error) {

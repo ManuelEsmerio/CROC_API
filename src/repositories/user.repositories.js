@@ -3,6 +3,7 @@ import { QueryTypes } from "sequelize";
 import db from "../db/connectionMysql.js";
 import { encryptData } from "../helpers/handleBcrypt.js";
 
+// Get all users
 const getAllUsers = async () => {
     const data = await db.query(`SELECT * FROM get_all_data_user WHERE is_deleted = 0`, {
         type: QueryTypes.SELECT,
@@ -11,6 +12,7 @@ const getAllUsers = async () => {
     return data;
 }
 
+// Get user by id
 const getUserById = async (userId) => {
     const data = await db.query(`SELECT * FROM get_all_data_user WHERE id = ?`, {
         logging: console.log,
@@ -21,7 +23,7 @@ const getUserById = async (userId) => {
     return data;
 }
 
-
+// Get user by email
 const getUserByEmail = async (email) => {
     const data = await db.query(`SELECT * FROM get_all_data_user WHERE email = ?`, {
         logging: console.log,
@@ -44,6 +46,7 @@ const addUser = async (body) => {
     return data;
 }
 
+// Update user
 const updateUser = async (body) => {
     body.password = await encryptData(body.password);
     const data = await db.query(`call add_edit_user_st (:code, :name, :lastname, :lastname_2, :birthdate, :curp, :rfc, :nss, :phone, :cellphone, :email, :gender, :marital_status, :id_suburb, :id_state, :id_municipality, :blood_type, :union_registration, :system_registration, :photo, :signature, :id_company, :is_deleted, :id_country, :password, :address, :ext, :ins);`
@@ -56,6 +59,7 @@ const updateUser = async (body) => {
     return data;
 }
 
+// Delete user
 const deleteUser = async (userId) => {
     const data = await db.query(`UPDATE users SET is_deleted = 1 WHERE id = ?`
         ,{

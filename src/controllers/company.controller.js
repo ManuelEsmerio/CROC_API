@@ -65,7 +65,7 @@ const addCompanyController = (async (req, res, next) => {
     }
 });
 
-// Update user by id
+// delete by id
 const deleteCompanyController = (async (req, res, next) => {
     try {
         const { companyId } = req.params;
